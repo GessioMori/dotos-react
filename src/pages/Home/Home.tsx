@@ -1,3 +1,27 @@
+import { todoMock } from '../../assets/todoMock'
+import { MainContainer } from '../../components/MainContainer.styles'
+import { TodosContainer } from './Home.styles'
+import { Todo } from './Todo'
+
 export function Home() {
-  return <></>
+  return (
+    <MainContainer>
+      <TodosContainer>
+        <table>
+          <thead>
+            <tr>
+              <th>Content</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {todoMock.map((todo) => (
+              <Todo key={todo.id} {...todo} />
+            ))}
+          </tbody>
+        </table>
+      </TodosContainer>
+    </MainContainer>
+  )
 }
