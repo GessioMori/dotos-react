@@ -4,12 +4,13 @@ export const todoMock = [
     is_completed: false,
     content: 'todo 1 todo 1 todo 1 todo 1 todo 1 todo 1 ',
     due_to: '2023-07-19T17:57:54.630Z',
-    created_at: '2022-07-19T17:57:54.630Z',
+    created_at: '2023-07-19T17:57:54.630Z',
   },
   {
     id: '2',
     is_completed: false,
-    content: 'todo 2',
+    content:
+      'Unfortunately the opacity property makes the whole element (including any text) semi-transparent.',
     due_to: '2031-07-19T17:57:54.630Z',
     created_at: '2021-07-20T17:57:54.630Z',
   },
@@ -17,7 +18,7 @@ export const todoMock = [
     id: '3',
     is_completed: false,
     content: 'todo 3',
-    due_to: '2023-07-19T17:57:54.630Z',
+    due_to: '2021-07-19T17:57:54.630Z',
     created_at: '2020-07-19T17:57:54.630Z',
   },
   {

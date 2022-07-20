@@ -1,6 +1,12 @@
+import dayjs from 'dayjs'
 import { CheckCircle, TrashSimple } from 'phosphor-react'
 import { useState } from 'react'
-import { TodoActionButton, TodoButtonsContainer } from './Home.styles'
+import {
+  TodoActionButton,
+  TodoButtonsContainer,
+  TodoDetails,
+  TodoStatus,
+} from './Home.styles'
 
 interface TodoProps {
   is_completed: boolean
@@ -16,14 +22,26 @@ export function Todo({ content, created_at, due_to, is_completed }: TodoProps) {
     setIsExpanded((current) => !current)
   }
 
+  function defineStatus() {
+    if (is_completed) {
+      return 'green'
+    } else if (dayjs().isAfter(dayjs(due_to))) {
+      return 'red'
+    } else {
+      return 'yellow'
+    }
+  }
+
   return (
     <>
       <tr>
+        <td onClick={toggleExpanded}>
+          <TodoStatus variant={defineStatus()}></TodoStatus>
+        </td>
         <td onClick={toggleExpanded}>{content}</td>
-        <td onClick={toggleExpanded}>{is_completed.toString()}</td>
         <td>
           <TodoButtonsContainer>
-            <TodoActionButton variant="green">
+            <TodoActionButton variant="blue">
               <CheckCircle weight="bold" />
             </TodoActionButton>
             <TodoActionButton variant="red">
@@ -33,9 +51,18 @@ export function Todo({ content, created_at, due_to, is_completed }: TodoProps) {
         </td>
       </tr>
       {isExpanded && (
-        <td colSpan={3} style={{ width: '100%', backgroundColor: 'red' }}>
-          teste
-        </td>
+        <tr>
+          <TodoDetails colSpan={3}>
+            <p>
+              <strong>Due to:</strong>{' '}
+              {dayjs(due_to).format('DD/MM/YYYY - HH:mm')}
+            </p>
+            <p>
+              <strong>Created at: </strong>
+              {dayjs(created_at).format('DD/MM/YYYY - HH:mm')}
+            </p>
+          </TodoDetails>
+        </tr>
       )}
     </>
   )

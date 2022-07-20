@@ -8,13 +8,6 @@ export function Home() {
     <MainContainer>
       <TodosContainer>
         <table>
-          <thead>
-            <tr>
-              <th>Content</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
           <tbody>
             {todoMock.map((todo) => (
               <Todo key={todo.id} {...todo} />
