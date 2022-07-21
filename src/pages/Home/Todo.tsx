@@ -25,7 +25,7 @@ export function Todo({ content, created_at, due_to, is_completed }: TodoProps) {
   function defineStatus() {
     if (is_completed) {
       return 'green'
-    } else if (dayjs().isAfter(dayjs(due_to))) {
+    } else if (due_to && dayjs().isAfter(dayjs(due_to))) {
       return 'red'
     } else {
       return 'yellow'
@@ -53,10 +53,13 @@ export function Todo({ content, created_at, due_to, is_completed }: TodoProps) {
       {isExpanded && (
         <tr>
           <TodoDetails colSpan={3}>
-            <p>
-              <strong>Due to:</strong>{' '}
-              {dayjs(due_to).format('DD/MM/YYYY - HH:mm')}
-            </p>
+            {due_to && (
+              <p>
+                <strong>Due to:</strong>{' '}
+                {dayjs(due_to).format('DD/MM/YYYY - HH:mm')}
+              </p>
+            )}
+
             <p>
               <strong>Created at: </strong>
               {dayjs(created_at).format('DD/MM/YYYY - HH:mm')}

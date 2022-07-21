@@ -1,4 +1,3 @@
-import DateTimePicker from 'react-datetime-picker'
 import styled, { css } from 'styled-components'
 
 export const CreateTodoContainer = styled.div`
@@ -9,6 +8,7 @@ export const CreateTodoContainer = styled.div`
   flex-direction: column;
   border-radius: 8px;
   padding: 1rem;
+  row-gap: 1rem;
 
   ${(props) => css`
     background-color: ${props.theme.dark800};
@@ -16,38 +16,19 @@ export const CreateTodoContainer = styled.div`
   `}
 `
 
-export const CustomDateTimePicker = styled(DateTimePicker)`
-  ${(props) => css`
-    .react-datetime-picker__inputGroup__input:invalid {
-      color: ${props.theme.red};
-    }
-    .react-datetime-picker__inputGroup__input {
-      color: ${props.theme.white};
-    }
-    .react-datetime-picker__inputGroup {
-      color: ${props.theme.white};
-      padding: 0.5rem;
-    }
-    .react-datetime-picker__wrapper {
-      border: none;
-      height: 2.5rem;
-      background-color: ${props.theme.dark700};
-      border-radius: 8px;
-      max-width: 14rem;
-    }
-    .react-datetime-picker {
-      border-radius: 8px;
-    }
-    .react-datetime-picker__button__icon {
-      stroke: ${props.theme.white} !important;
-    }
-    .react-datetime-picker__button__icon:hover {
-      stroke: ${props.theme.purple700} !important;
-    }
-    .react-datetime-picker__inputGroup__input:invalid {
-      background-color: ${props.theme.dark700} !important;
-    }
-  `}
+export const DueToButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+`
+
+export const DueToContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  flex: 1;
 `
 
 export const TodosContainer = styled.div`

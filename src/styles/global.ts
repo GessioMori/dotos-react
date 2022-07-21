@@ -10,6 +10,8 @@ export const GlobalStyle = createGlobalStyle`
 body {
   background-color: #0E0E0E;
   color: #F9F9F9;
+}
+body, input{
   font-family: 'Roboto', sans-serif;
 }
 `
