@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import ReactPaginate from 'react-paginate'
 import { todoMock } from '../../assets/todoMock'
 import { ButtonContainer } from '../../components/Button.styles'
 import { InputContainer } from '../../components/Input.styles'
@@ -11,6 +12,14 @@ import {
   TodosContainer,
 } from './Home.styles'
 import { Todo } from './Todo'
+
+interface ITodo {
+  id: string
+  is_completed: boolean
+  content: string
+  due_to: string | null
+  created_at: string
+}
 
 export function Home() {
   const [date, setDate] = useState('')
@@ -30,7 +39,7 @@ export function Home() {
   return (
     <MainContainer>
       <CreateTodoContainer>
-        <InputContainer type="text" placeholder="Type your todo here." />
+        <InputContainer type="text" placeholder="Type your new todo here." />
         <DueToButtonContainer>
           <DueToContainer>
             <InputContainer
@@ -54,14 +63,57 @@ export function Home() {
         </DueToButtonContainer>
       </CreateTodoContainer>
       <TodosContainer>
-        <table>
-          <tbody>
-            {todoMock.map((todo) => (
-              <Todo key={todo.id} {...todo} />
-            ))}
-          </tbody>
-        </table>
+        <PaginatedItems itemsPerPage={8} />
       </TodosContainer>
     </MainContainer>
+  )
+}
+
+function PaginatedItems({ itemsPerPage }: { itemsPerPage: number }) {
+  const [currentItems, setCurrentItems] = useState<ITodo[] | null>(null)
+  const [pageCount, setPageCount] = useState(0)
+  const [itemOffset, setItemOffset] = useState(0)
+
+  useEffect(() => {
+    const endOffset = itemOffset + itemsPerPage
+    setCurrentItems(todoMock.slice(itemOffset, endOffset))
+    setPageCount(Math.ceil(todoMock.length / itemsPerPage))
+  }, [itemOffset, itemsPerPage])
+
+  const handlePageClick = (event: { selected: number }) => {
+    const newOffset = (event.selected * itemsPerPage) % todoMock.length
+    setItemOffset(newOffset)
+  }
+
+  return (
+    <>
+      {currentItems?.length !== 0 && (
+        <>
+          <Items currentItems={currentItems} />
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel="ᐅ"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={2}
+            marginPagesDisplayed={0}
+            pageCount={pageCount}
+            previousLabel="ᐊ"
+            disabledClassName="disabled"
+            activeClassName="active"
+          />
+        </>
+      )}
+    </>
+  )
+}
+
+function Items({ currentItems }: { currentItems: ITodo[] | null }) {
+  return (
+    <table>
+      <tbody>
+        {currentItems &&
+          currentItems.map((todo) => <Todo key={todo.id} {...todo} />)}
+      </tbody>
+    </table>
   )
 }

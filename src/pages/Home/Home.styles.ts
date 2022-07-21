@@ -47,6 +47,46 @@ export const TodosContainer = styled.div`
       border-top: 1px solid ${props.theme.dark600};
       border-bottom: 1px solid ${props.theme.dark600};
     }
+    ul {
+      display: flex;
+      gap: 1rem;
+      list-style: none;
+      justify-content: end;
+      padding: 1rem;
+
+      li {
+        height: 2rem;
+        background-color: ${props.theme.dark900};
+        cursor: pointer;
+        width: 2rem;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: ${props.theme.white};
+      }
+
+      li a {
+        padding: 0.2rem 0.2rem;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+      }
+
+      li.active a {
+        background-color: ${props.theme.purple800};
+      }
+      li.disabled a {
+        background-color: ${props.theme.dark700};
+      }
+      li.disable,
+      li.disabled a {
+        cursor: default;
+      }
+    }
   `}
   table {
     border-collapse: collapse;
@@ -69,10 +109,6 @@ export const TodosContainer = styled.div`
   }
   tr:first-child td {
     border-top: none;
-  }
-  tr:last-child td {
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
   }
   table:last-child td {
     border-bottom: none;
