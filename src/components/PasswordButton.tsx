@@ -11,16 +11,16 @@ export function PasswordButton({
 }: PasswordButtonProps) {
   return (
     <>
-      {isVisible ? (
+      {!isVisible ? (
         <Eye
-          style={{ position: 'absolute', right: '1rem' }}
+          style={{ position: 'absolute', right: '1rem', top: '1.2rem' }}
           size={20}
           onClick={toggleVisibility}
           weight="bold"
         />
       ) : (
         <EyeSlash
-          style={{ position: 'absolute', right: '1rem' }}
+          style={{ position: 'absolute', right: '1rem', top: '1.2rem' }}
           size={20}
           onClick={toggleVisibility}
           weight="bold"

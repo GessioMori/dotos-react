@@ -22,12 +22,18 @@ export function SignUp() {
       <BaseContainer>
         <TitleContainer>Sign up</TitleContainer>
         <LabelContainer htmlFor="name">Name:</LabelContainer>
-        <InputContainer type="text" id="name" placeholder="Enter your name." />
+        <InputContainer
+          type="text"
+          id="name"
+          placeholder="Enter your name."
+          marginTop={true}
+        />
         <LabelContainer htmlFor="email">Email:</LabelContainer>
         <InputContainer
           type="email"
           id="email"
           placeholder="Enter your email."
+          marginTop={true}
         />
         <LabelContainer htmlFor="password">Password:</LabelContainer>
         <PasswordContainer>
@@ -35,13 +41,14 @@ export function SignUp() {
             type={isVisible ? 'text' : 'password'}
             id="password"
             placeholder="Enter your password."
+            marginTop={true}
           />
           <PasswordButton
             isVisible={isVisible}
             toggleVisibility={toggleVisibility}
           />
         </PasswordContainer>
-        <ButtonContainer>Send</ButtonContainer>
+        <ButtonContainer marginTop={true}>Send</ButtonContainer>
 
         <HelperLink to="/signin">
           <SignIn size={20} />

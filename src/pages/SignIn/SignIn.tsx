@@ -26,6 +26,7 @@ export function SignIn() {
           type="email"
           id="email"
           placeholder="Enter your email."
+          marginTop={true}
         />
         <LabelContainer htmlFor="password">Password:</LabelContainer>
         <PasswordContainer>
@@ -33,6 +34,7 @@ export function SignIn() {
             type={isVisible ? 'text' : 'password'}
             id="password"
             placeholder="Enter your password."
+            marginTop={true}
           />
           <PasswordButton
             isVisible={isVisible}
@@ -40,7 +42,7 @@ export function SignIn() {
           />
         </PasswordContainer>
 
-        <ButtonContainer>Send</ButtonContainer>
+        <ButtonContainer marginTop={true}>Send</ButtonContainer>
         <HelperLink to="/signup">
           <User size={20} />
           <p>Don&apos;t have an account? Sign up!</p>

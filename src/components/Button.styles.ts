@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components'
 
 interface ButtonContainerProps {
   maxWidth?: string
+  marginTop?: boolean
 }
 
 export const ButtonContainer = styled.button<ButtonContainerProps>`
@@ -21,6 +22,7 @@ export const ButtonContainer = styled.button<ButtonContainerProps>`
       background-color: ${props.theme.purple800};
       color: ${props.theme.white};
       max-width: ${props.maxWidth || '300rem'};
+      margin-top: ${props.marginTop ? '1rem' : '0'};
       :focus {
         outline: ${props.theme.purple800} solid 2px;
         outline-offset: 2px;

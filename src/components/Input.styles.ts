@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components'
 
 interface InputContainerProps {
   maxWidth?: string
+  marginTop?: boolean
 }
 
 export const InputContainer = styled.input<InputContainerProps>`
@@ -17,6 +18,7 @@ export const InputContainer = styled.input<InputContainerProps>`
     color: ${props.theme.white};
     font-size: 1rem;
     max-width: ${props.maxWidth || '300rem'};
+    margin-top: ${props.marginTop ? '0.5rem' : '0'};
 
     &[value=''] {
       color: ${props.theme.dark200};

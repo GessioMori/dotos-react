@@ -6,9 +6,11 @@ import { ButtonContainer } from '../../components/Button.styles'
 import { InputContainer } from '../../components/Input.styles'
 import { MainContainer } from '../../components/MainContainer.styles'
 import {
+  Checkbox,
   CreateTodoContainer,
   DueToButtonContainer,
   DueToContainer,
+  FilterAndSortContainer,
   TodosContainer,
 } from './Home.styles'
 import { Todo } from './Todo'
@@ -22,8 +24,13 @@ interface ITodo {
 }
 
 export function Home() {
+  const [todos, setTodos] = useState<ITodo[]>([])
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
+
+  const [filter, setFilter] = useState<'created_at' | 'due_to' | null>(null)
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
 
   function handleDateChange(newDate: string) {
     setDate(newDate)
@@ -36,6 +43,27 @@ export function Home() {
       ? console.log(dayjs(date + time).toISOString())
       : console.log(dayjs(date + '23:59:59').toISOString())
   }
+  function handleSetFilter(filterType: typeof filter) {
+    setFilter((current) => (current === filterType ? null : filterType))
+  }
+  function sortTodos(todosList: ITodo[]) {
+    const completedTodos = todosList.filter((todo) => todo.is_completed)
+    const delayedTodos = todosList.filter(
+      (todo) =>
+        !todo.is_completed &&
+        todo.due_to &&
+        dayjs().isAfter(dayjs(todo.due_to)),
+    )
+    const incompletedTodos = todosList.filter(
+      (todo) => !todo.is_completed && dayjs().isBefore(dayjs(todo.due_to)),
+    )
+    setTodos(() => [...delayedTodos, ...incompletedTodos, ...completedTodos])
+  }
+
+  useEffect(() => {
+    sortTodos(todoMock)
+  }, [])
+
   return (
     <MainContainer>
       <CreateTodoContainer>
@@ -44,7 +72,6 @@ export function Home() {
           <DueToContainer>
             <InputContainer
               min={dayjs(new Date()).format('YYYY-MM-DD')}
-              placeholder={'DD/MM/YYYY'}
               type="date"
               value={date}
               onChange={(e) => handleDateChange(e.target.value)}
@@ -62,26 +89,42 @@ export function Home() {
           </ButtonContainer>
         </DueToButtonContainer>
       </CreateTodoContainer>
+      <FilterAndSortContainer>
+        <Checkbox
+          checked={filter === 'created_at'}
+          onClick={() => handleSetFilter('created_at')}
+        />
+        <Checkbox
+          checked={filter === 'due_to'}
+          onClick={() => handleSetFilter('due_to')}
+        />
+      </FilterAndSortContainer>
       <TodosContainer>
-        <PaginatedItems itemsPerPage={8} />
+        <PaginatedItems itemsPerPage={8} todosList={todos} />
       </TodosContainer>
     </MainContainer>
   )
 }
 
-function PaginatedItems({ itemsPerPage }: { itemsPerPage: number }) {
+function PaginatedItems({
+  itemsPerPage,
+  todosList,
+}: {
+  itemsPerPage: number
+  todosList: ITodo[]
+}) {
   const [currentItems, setCurrentItems] = useState<ITodo[] | null>(null)
   const [pageCount, setPageCount] = useState(0)
   const [itemOffset, setItemOffset] = useState(0)
 
   useEffect(() => {
     const endOffset = itemOffset + itemsPerPage
-    setCurrentItems(todoMock.slice(itemOffset, endOffset))
-    setPageCount(Math.ceil(todoMock.length / itemsPerPage))
-  }, [itemOffset, itemsPerPage])
+    setCurrentItems(todosList.slice(itemOffset, endOffset))
+    setPageCount(Math.ceil(todosList.length / itemsPerPage))
+  }, [itemOffset, itemsPerPage, todosList])
 
   const handlePageClick = (event: { selected: number }) => {
-    const newOffset = (event.selected * itemsPerPage) % todoMock.length
+    const newOffset = (event.selected * itemsPerPage) % todosList.length
     setItemOffset(newOffset)
   }
 
