@@ -25,7 +25,7 @@ export const InputContainer = styled.input<InputContainerProps>`
     }
 
     :focus {
-      outline: ${props.theme.purple800} solid 2px;
+      outline: ${props.theme.blue} solid 2px;
     }
   `}
 `

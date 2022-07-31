@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { Calendar, Clock, NotePencil } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate'
 import { todoMock } from '../../assets/todoMock'
@@ -11,6 +12,7 @@ import {
   DueToContainer,
   FilterContainer,
   FilterDateContainer,
+  IconInputContainer,
   TodosContainer,
 } from './Home.styles'
 import { Todo } from './Todo'
@@ -55,36 +57,6 @@ export function Home() {
       : console.log(dayjs(date + '23:59:59').toISOString())
   }
 
-  function filterTodosByDate(todosList: ITodo[]) {
-    return todosList.filter(
-      (todo) =>
-        dayjs(todo.created_at).isAfter(startDate) &&
-        dayjs(todo.created_at).isBefore(endDate + '23:59:59'),
-    )
-  }
-
-  function sortTodos(todosList: ITodo[]) {
-    const completedTodos = sortTodosByCreationDate(
-      todosList.filter((todo) => todo.is_completed),
-    )
-    const delayedTodos = sortTodosByCreationDate(
-      todosList.filter(
-        (todo) =>
-          !todo.is_completed &&
-          todo.due_to &&
-          dayjs().isAfter(dayjs(todo.due_to)),
-      ),
-    )
-    const incompleteTodos = sortTodosByCreationDate(
-      todosList.filter(
-        (todo) =>
-          !todo.is_completed &&
-          (dayjs().isBefore(dayjs(todo.due_to)) || !todo.due_to),
-      ),
-    )
-    setTodos(() => [...delayedTodos, ...incompleteTodos, ...completedTodos])
-  }
-
   function sortTodosByCreationDate(todosList: ITodo[]) {
     return todosList.sort(
       (a, b) => dayjs(b.created_at).valueOf() - dayjs(a.created_at).valueOf(),
@@ -92,28 +64,70 @@ export function Home() {
   }
 
   useEffect(() => {
+    function filterTodosByDate(todosList: ITodo[]) {
+      return todosList.filter(
+        (todo) =>
+          dayjs(todo.created_at).isAfter(startDate) &&
+          dayjs(todo.created_at).isBefore(endDate + '23:59:59'),
+      )
+    }
+
+    function sortTodos(todosList: ITodo[]) {
+      const completedTodos = sortTodosByCreationDate(
+        todosList.filter((todo) => todo.is_completed),
+      )
+      const delayedTodos = sortTodosByCreationDate(
+        todosList.filter(
+          (todo) =>
+            !todo.is_completed &&
+            todo.due_to &&
+            dayjs().isAfter(dayjs(todo.due_to)),
+        ),
+      )
+      const incompleteTodos = sortTodosByCreationDate(
+        todosList.filter(
+          (todo) =>
+            !todo.is_completed &&
+            (dayjs().isBefore(dayjs(todo.due_to)) || !todo.due_to),
+        ),
+      )
+      setTodos(() => [...delayedTodos, ...incompleteTodos, ...completedTodos])
+    }
     sortTodos(filterTodosByDate(todoMock))
   }, [startDate, endDate])
 
   return (
     <MainContainer>
       <CreateTodoContainer>
-        <InputContainer type="text" placeholder="Type your new todo here." />
+        <IconInputContainer>
+          <NotePencil size={24} weight="bold" />
+          <InputContainer type="text" placeholder="Type your new todo here." />
+        </IconInputContainer>
         <DueToButtonContainer>
           <DueToContainer>
-            <InputContainer
-              min={dayjs().format('YYYY-MM-DD')}
-              type="date"
-              value={date}
-              onChange={(e) => handleDateInputChange(e.target.value, 'newDate')}
-              maxWidth="10rem"
-            />
-            <InputContainer
-              type="time"
-              value={time}
-              onChange={(e) => handleDateInputChange(e.target.value, 'newTime')}
-              maxWidth="8rem"
-            />
+            <IconInputContainer>
+              <Calendar size={24} weight="bold" />
+              <InputContainer
+                min={dayjs().format('YYYY-MM-DD')}
+                type="date"
+                value={date}
+                onChange={(e) =>
+                  handleDateInputChange(e.target.value, 'newDate')
+                }
+                maxWidth="10rem"
+              />
+            </IconInputContainer>
+            <IconInputContainer>
+              <Clock size={24} weight="bold" />
+              <InputContainer
+                type="time"
+                value={time}
+                onChange={(e) =>
+                  handleDateInputChange(e.target.value, 'newTime')
+                }
+                maxWidth="8rem"
+              />
+            </IconInputContainer>
           </DueToContainer>
           <ButtonContainer onClick={send} maxWidth="5rem">
             Send

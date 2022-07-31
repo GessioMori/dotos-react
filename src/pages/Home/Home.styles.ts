@@ -16,6 +16,12 @@ export const CreateTodoContainer = styled.div`
   `}
 `
 
+export const IconInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 0.5rem;
+`
+
 export const FilterContainer = styled.div`
   width: 95%;
   margin: auto;
@@ -103,7 +109,7 @@ export const TodosContainer = styled.div`
       }
 
       li.active a {
-        background-color: ${props.theme.purple800};
+        background-color: ${props.theme.blue};
       }
       li.disabled a {
         background-color: ${props.theme.dark700};
@@ -149,7 +155,7 @@ export const TodoDetails = styled.td`
 `
 
 interface TodoActionButtonProps {
-  variant: 'red' | 'blue'
+  variant: 'red' | 'green'
 }
 
 export const TodoActionButton = styled.button<TodoActionButtonProps>`
@@ -178,6 +184,10 @@ export const TodoActionButton = styled.button<TodoActionButtonProps>`
 
   ${(props) => css`
     background-color: ${props.theme[props.variant]};
+    :focus {
+      outline: ${props.theme[props.variant]} solid 2px;
+      outline-offset: 2px;
+    }
   `}
 `
 

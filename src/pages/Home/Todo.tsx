@@ -41,7 +41,7 @@ export function Todo({ content, created_at, due_to, is_completed }: TodoProps) {
         <td onClick={toggleExpanded}>{content}</td>
         <td>
           <TodoButtonsContainer>
-            <TodoActionButton variant="blue">
+            <TodoActionButton variant="green">
               <CheckCircle weight="bold" />
             </TodoActionButton>
             <TodoActionButton variant="red">
