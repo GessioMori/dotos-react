@@ -6,11 +6,11 @@ import { ButtonContainer } from '../../components/Button.styles'
 import { InputContainer } from '../../components/Input.styles'
 import { MainContainer } from '../../components/MainContainer.styles'
 import {
-  Checkbox,
   CreateTodoContainer,
   DueToButtonContainer,
   DueToContainer,
-  FilterAndSortContainer,
+  FilterContainer,
+  FilterDateContainer,
   TodosContainer,
 } from './Home.styles'
 import { Todo } from './Todo'
@@ -28,41 +28,72 @@ export function Home() {
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
 
-  const [filter, setFilter] = useState<'created_at' | 'due_to' | null>(null)
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
+  const [startDate, setStartDate] = useState<string>(
+    dayjs().startOf('month').format('YYYY-MM-DD'),
+  )
+  const [endDate, setEndDate] = useState<string>(
+    dayjs().endOf('month').format('YYYY-MM-DD'),
+  )
 
-  function handleDateChange(newDate: string) {
-    setDate(newDate)
-  }
-  function handleTimeChange(newTime: string) {
-    setTime(newTime)
+  function handleDateInputChange(
+    value: string,
+    type: 'newDate' | 'newTime' | 'newStartDate' | 'newEndDate',
+  ) {
+    if (type === 'newDate') {
+      setDate(() => value)
+    } else if (type === 'newTime') {
+      setTime(() => value)
+    } else if (type === 'newStartDate') {
+      setStartDate(() => value)
+    } else if (type === 'newEndDate') {
+      setEndDate(() => value)
+    }
   }
   function send() {
     time
       ? console.log(dayjs(date + time).toISOString())
       : console.log(dayjs(date + '23:59:59').toISOString())
   }
-  function handleSetFilter(filterType: typeof filter) {
-    setFilter((current) => (current === filterType ? null : filterType))
-  }
-  function sortTodos(todosList: ITodo[]) {
-    const completedTodos = todosList.filter((todo) => todo.is_completed)
-    const delayedTodos = todosList.filter(
+
+  function filterTodosByDate(todosList: ITodo[]) {
+    return todosList.filter(
       (todo) =>
-        !todo.is_completed &&
-        todo.due_to &&
-        dayjs().isAfter(dayjs(todo.due_to)),
+        dayjs(todo.created_at).isAfter(startDate) &&
+        dayjs(todo.created_at).isBefore(endDate + '23:59:59'),
     )
-    const incompletedTodos = todosList.filter(
-      (todo) => !todo.is_completed && dayjs().isBefore(dayjs(todo.due_to)),
+  }
+
+  function sortTodos(todosList: ITodo[]) {
+    const completedTodos = sortTodosByCreationDate(
+      todosList.filter((todo) => todo.is_completed),
     )
-    setTodos(() => [...delayedTodos, ...incompletedTodos, ...completedTodos])
+    const delayedTodos = sortTodosByCreationDate(
+      todosList.filter(
+        (todo) =>
+          !todo.is_completed &&
+          todo.due_to &&
+          dayjs().isAfter(dayjs(todo.due_to)),
+      ),
+    )
+    const incompleteTodos = sortTodosByCreationDate(
+      todosList.filter(
+        (todo) =>
+          !todo.is_completed &&
+          (dayjs().isBefore(dayjs(todo.due_to)) || !todo.due_to),
+      ),
+    )
+    setTodos(() => [...delayedTodos, ...incompleteTodos, ...completedTodos])
+  }
+
+  function sortTodosByCreationDate(todosList: ITodo[]) {
+    return todosList.sort(
+      (a, b) => dayjs(b.created_at).valueOf() - dayjs(a.created_at).valueOf(),
+    )
   }
 
   useEffect(() => {
-    sortTodos(todoMock)
-  }, [])
+    sortTodos(filterTodosByDate(todoMock))
+  }, [startDate, endDate])
 
   return (
     <MainContainer>
@@ -71,16 +102,16 @@ export function Home() {
         <DueToButtonContainer>
           <DueToContainer>
             <InputContainer
-              min={dayjs(new Date()).format('YYYY-MM-DD')}
+              min={dayjs().format('YYYY-MM-DD')}
               type="date"
               value={date}
-              onChange={(e) => handleDateChange(e.target.value)}
+              onChange={(e) => handleDateInputChange(e.target.value, 'newDate')}
               maxWidth="10rem"
             />
             <InputContainer
               type="time"
               value={time}
-              onChange={(e) => handleTimeChange(e.target.value)}
+              onChange={(e) => handleDateInputChange(e.target.value, 'newTime')}
               maxWidth="8rem"
             />
           </DueToContainer>
@@ -89,16 +120,32 @@ export function Home() {
           </ButtonContainer>
         </DueToButtonContainer>
       </CreateTodoContainer>
-      <FilterAndSortContainer>
-        <Checkbox
-          checked={filter === 'created_at'}
-          onClick={() => handleSetFilter('created_at')}
-        />
-        <Checkbox
-          checked={filter === 'due_to'}
-          onClick={() => handleSetFilter('due_to')}
-        />
-      </FilterAndSortContainer>
+      <FilterContainer>
+        <FilterDateContainer>
+          <p>Start:</p>
+          <InputContainer
+            type="date"
+            max={dayjs(endDate).format('YYYY-MM-DD')}
+            value={startDate}
+            onChange={(e) =>
+              handleDateInputChange(e.target.value, 'newStartDate')
+            }
+            maxWidth="10rem"
+          />
+        </FilterDateContainer>
+        <FilterDateContainer>
+          <p>End:</p>
+          <InputContainer
+            type="date"
+            min={dayjs(startDate).format('YYYY-MM-DD')}
+            value={endDate}
+            onChange={(e) =>
+              handleDateInputChange(e.target.value, 'newEndDate')
+            }
+            maxWidth="10rem"
+          />
+        </FilterDateContainer>
+      </FilterContainer>
       <TodosContainer>
         <PaginatedItems itemsPerPage={8} todosList={todos} />
       </TodosContainer>

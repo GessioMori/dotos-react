@@ -16,35 +16,29 @@ export const CreateTodoContainer = styled.div`
   `}
 `
 
-export const FilterAndSortContainer = styled.div`
+export const FilterContainer = styled.div`
   width: 95%;
   margin: auto;
   max-width: 60rem;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   border-radius: 8px;
   padding: 1rem;
   row-gap: 1rem;
+  column-gap: 2rem;
+  flex-wrap: wrap;
 
   ${(props) => css`
     background-color: ${props.theme.dark800};
     color: ${props.theme.dark200};
   `}
 `
-interface CheckboxProps {
-  checked: boolean
-}
-export const Checkbox = styled.div<CheckboxProps>`
-  height: 1rem;
-  width: 1rem;
-  border-radius: 50%;
-  outline-offset: 2px;
-  ${(props) => css`
-    outline: 2px solid ${props.theme.purple700};
-    background-color: ${props.checked
-      ? props.theme.purple700
-      : props.theme.dark800};
-  `}
+
+export const FilterDateContainer = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+  min-width: 30%;
 `
 
 export const DueToButtonContainer = styled.div`
