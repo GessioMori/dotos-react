@@ -155,7 +155,7 @@ export const TodoDetails = styled.td`
 `
 
 interface TodoActionButtonProps {
-  variant: 'red' | 'green'
+  variant: 'red' | 'green' | 'yellow'
 }
 
 export const TodoActionButton = styled.button<TodoActionButtonProps>`

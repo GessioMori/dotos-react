@@ -17,8 +17,9 @@ export function RecoverPassword() {
           type="email"
           id="email"
           placeholder="Enter your email."
+          marginTop={true}
         />
-        <ButtonContainer>Send email</ButtonContainer>
+        <ButtonContainer marginTop={true}>Send email</ButtonContainer>
         <HelperLink to="/signin">
           <User size={20} />
           <p>Remember your password? Sign in!</p>

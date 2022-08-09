@@ -7,7 +7,7 @@ export const defaultTheme = {
   dark200: '#999999',
 
   white: '#F9F9F9',
-  yellow: '#ebcb8b',
+  yellow: '#e3b354',
   red: '#bf616a',
   blue: '#5e81ac',
   green: '#639965',

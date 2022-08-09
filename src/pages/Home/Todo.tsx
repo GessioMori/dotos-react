@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { CheckCircle, TrashSimple } from 'phosphor-react'
+import { CheckCircle, TrashSimple, XCircle } from 'phosphor-react'
 import { useState } from 'react'
 import {
   TodoActionButton,
@@ -24,8 +24,18 @@ export function Todo({ content, created_at, due_to, is_completed }: TodoProps) {
 
   function defineStatus() {
     if (is_completed) {
-      return 'green'
+      return 'completed'
     } else if (due_to && dayjs().isAfter(dayjs(due_to))) {
+      return 'delayed'
+    } else {
+      return 'ongoing'
+    }
+  }
+
+  function defineStatusColor() {
+    if (defineStatus() === 'completed') {
+      return 'green'
+    } else if (defineStatus() === 'delayed') {
       return 'red'
     } else {
       return 'yellow'
@@ -36,13 +46,19 @@ export function Todo({ content, created_at, due_to, is_completed }: TodoProps) {
     <>
       <tr>
         <td onClick={toggleExpanded}>
-          <TodoStatus variant={defineStatus()}></TodoStatus>
+          <TodoStatus variant={defineStatusColor()}></TodoStatus>
         </td>
         <td onClick={toggleExpanded}>{content}</td>
         <td>
           <TodoButtonsContainer>
-            <TodoActionButton variant="green">
-              <CheckCircle weight="bold" />
+            <TodoActionButton
+              variant={defineStatusColor() === 'green' ? 'yellow' : 'green'}
+            >
+              {defineStatusColor() === 'green' ? (
+                <XCircle weight="bold" />
+              ) : (
+                <CheckCircle weight="bold" />
+              )}
             </TodoActionButton>
             <TodoActionButton variant="red">
               <TrashSimple weight="bold" />
