@@ -6,7 +6,7 @@ import {
   TodoButtonsContainer,
   TodoDetails,
   TodoStatus,
-} from './Home.styles'
+} from './styles'
 
 interface TodoProps {
   is_completed: boolean

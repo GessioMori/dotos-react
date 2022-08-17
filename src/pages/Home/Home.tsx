@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
 import { Calendar, Clock, NotePencil } from 'phosphor-react'
 import { useEffect, useState } from 'react'
-import ReactPaginate from 'react-paginate'
 import { todoMock } from '../../assets/todoMock'
 import { ButtonContainer } from '../../components/Button.styles'
 import { InputContainer } from '../../components/Input.styles'
@@ -15,9 +14,9 @@ import {
   IconInputContainer,
   TodosContainer,
 } from './Home.styles'
-import { Todo } from './Todo'
+import { PaginatedItems } from './PaginatedItems'
 
-interface ITodo {
+export interface ITodo {
   id: string
   is_completed: boolean
   content: string
@@ -164,60 +163,5 @@ export function Home() {
         <PaginatedItems itemsPerPage={8} todosList={todos} />
       </TodosContainer>
     </MainContainer>
-  )
-}
-
-function PaginatedItems({
-  itemsPerPage,
-  todosList,
-}: {
-  itemsPerPage: number
-  todosList: ITodo[]
-}) {
-  const [currentItems, setCurrentItems] = useState<ITodo[] | null>(null)
-  const [pageCount, setPageCount] = useState(0)
-  const [itemOffset, setItemOffset] = useState(0)
-
-  useEffect(() => {
-    const endOffset = itemOffset + itemsPerPage
-    setCurrentItems(todosList.slice(itemOffset, endOffset))
-    setPageCount(Math.ceil(todosList.length / itemsPerPage))
-  }, [itemOffset, itemsPerPage, todosList])
-
-  const handlePageClick = (event: { selected: number }) => {
-    const newOffset = (event.selected * itemsPerPage) % todosList.length
-    setItemOffset(newOffset)
-  }
-
-  return (
-    <>
-      {currentItems?.length !== 0 && (
-        <>
-          <Items currentItems={currentItems} />
-          <ReactPaginate
-            breakLabel="..."
-            nextLabel="ᐅ"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={2}
-            marginPagesDisplayed={0}
-            pageCount={pageCount}
-            previousLabel="ᐊ"
-            disabledClassName="disabled"
-            activeClassName="active"
-          />
-        </>
-      )}
-    </>
-  )
-}
-
-function Items({ currentItems }: { currentItems: ITodo[] | null }) {
-  return (
-    <table>
-      <tbody>
-        {currentItems &&
-          currentItems.map((todo) => <Todo key={todo.id} {...todo} />)}
-      </tbody>
-    </table>
   )
 }
