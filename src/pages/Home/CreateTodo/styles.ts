@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const CreateTodoContainer = styled.div`
+export const CreateTodoForm = styled.form`
   width: 95%;
   margin: auto;
   max-width: 60rem;
@@ -26,6 +26,11 @@ export const DueToButtonContainer = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+
+  @media screen and (max-width: 620px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `
 
 export const DueToContainer = styled.div`
@@ -33,5 +38,21 @@ export const DueToContainer = styled.div`
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
+`
+
+export const ErrorsContainer = styled.div`
+  p {
+    font-size: 0.8rem;
+    color: ${(props) => props.theme.red};
+  }
+`
+export const ErrorButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
   flex: 1;
+  justify-content: flex-end;
+  @media screen and (max-width: 620px) {
+    flex-direction: row-reverse;
+  }
 `
