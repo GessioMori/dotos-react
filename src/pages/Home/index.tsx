@@ -4,8 +4,8 @@ import { todoMock } from '../../assets/todoMock'
 import { MainContainer } from '../../components/MainContainer.styles'
 import { CreateTodo } from './CreateTodo'
 import { FilterTodos } from './FilterTodos'
-import { TodosContainer } from './Home.styles'
 import { PaginatedItems } from './PaginatedItems'
+import { TodosContainer } from './styles'
 
 export interface ITodo {
   id: string

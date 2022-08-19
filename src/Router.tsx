@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import { DefaultLayout } from './layouts/DefaultLayout'
-import { Home } from './pages/Home/Home'
+import { Home } from './pages/Home'
 import { RecoverPassword } from './pages/RecoverPassword'
 import { SignIn } from './pages/SignIn'
 import { SignUp } from './pages/SignUp'
