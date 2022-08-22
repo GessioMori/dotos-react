@@ -17,6 +17,11 @@ export const ButtonContainer = styled.button<ButtonContainerProps>`
     filter: brightness(1.2);
   }
 
+  :disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
   ${(props) =>
     css`
       background-color: ${props.theme.blue};

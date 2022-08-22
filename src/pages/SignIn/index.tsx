@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Key, User } from 'phosphor-react'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import * as zod from 'zod'
 import { ButtonContainer } from '../../components/Button.styles'
 import { BaseContainer } from '../../components/Container.styles'
@@ -12,6 +13,7 @@ import { MainContainer } from '../../components/MainContainer.styles'
 import { PasswordButton } from '../../components/PasswordButton'
 import { PasswordContainer } from '../../components/PasswordContainer.styles'
 import { TitleContainer } from '../../components/Title.styles'
+import { api } from '../../libs/axios'
 
 const validationSchema = zod
   .object({
@@ -26,16 +28,45 @@ type SignInInputs = zod.infer<typeof validationSchema>
 
 export function SignIn() {
   const [isVisible, setIsVisible] = useState(false)
+  const navigate = useNavigate()
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    setError,
+    formState: { errors, isSubmitting },
   } = useForm<SignInInputs>({
     resolver: zodResolver(validationSchema),
   })
 
-  const onSubmit: SubmitHandler<SignInInputs> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<SignInInputs> = async ({ email, password }) => {
+    await api
+      .post('/account/login', {
+        email,
+        password,
+      })
+      .then(() => navigate('/'))
+      .catch((err) => {
+        if (err.response.data.message === 'Invalid email or password.') {
+          setError(
+            'email',
+            { message: 'Invalid email or password' },
+            { shouldFocus: false },
+          )
+          setError(
+            'password',
+            { message: 'Invalid email or password' },
+            { shouldFocus: false },
+          )
+        } else {
+          setError(
+            'password',
+            { message: 'An error has occurred, please try again' },
+            { shouldFocus: false },
+          )
+        }
+      })
+  }
 
   function toggleVisibility() {
     setIsVisible((current) => !current)
@@ -71,7 +102,11 @@ export function SignIn() {
           </PasswordContainer>
           <p>{errors.password?.message}</p>
 
-          <ButtonContainer marginTop={true} type="submit">
+          <ButtonContainer
+            marginTop={true}
+            type="submit"
+            disabled={isSubmitting}
+          >
             Send
           </ButtonContainer>
         </form>

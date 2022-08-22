@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SignIn } from 'phosphor-react'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import * as zod from 'zod'
 import { ButtonContainer } from '../../components/Button.styles'
 import { BaseContainer } from '../../components/Container.styles'
@@ -12,6 +13,7 @@ import { MainContainer } from '../../components/MainContainer.styles'
 import { PasswordButton } from '../../components/PasswordButton'
 import { PasswordContainer } from '../../components/PasswordContainer.styles'
 import { TitleContainer } from '../../components/Title.styles'
+import { api } from '../../libs/axios'
 
 const validationSchema = zod
   .object({
@@ -28,12 +30,14 @@ const validationSchema = zod
 type SignUpInputs = zod.infer<typeof validationSchema>
 
 export function SignUp() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    setError,
+    formState: { errors, isSubmitting },
   } = useForm<SignUpInputs>({
     resolver: zodResolver(validationSchema),
   })
@@ -42,7 +46,34 @@ export function SignUp() {
     setIsVisible((current) => !current)
   }
 
-  const onSubmit: SubmitHandler<SignUpInputs> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<SignUpInputs> = async ({
+    email,
+    name,
+    password,
+  }) => {
+    await api
+      .post('/account', {
+        email,
+        name,
+        password,
+      })
+      .then(() => navigate('/signin'))
+      .catch((err) => {
+        if (err.response.data.message === 'Email already registered.') {
+          setError(
+            'email',
+            { message: 'Email already registered' },
+            { shouldFocus: true },
+          )
+        } else {
+          setError(
+            'password',
+            { message: 'An error has occurred, please try again' },
+            { shouldFocus: false },
+          )
+        }
+      })
+  }
 
   return (
     <MainContainer>
@@ -82,7 +113,11 @@ export function SignUp() {
             />
           </PasswordContainer>
           <p>{errors.password?.message}</p>
-          <ButtonContainer marginTop={true} type="submit">
+          <ButtonContainer
+            marginTop={true}
+            type="submit"
+            disabled={isSubmitting}
+          >
             Send
           </ButtonContainer>
         </form>
