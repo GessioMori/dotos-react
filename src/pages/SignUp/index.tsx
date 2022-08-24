@@ -52,12 +52,20 @@ export function SignUp() {
     password,
   }) => {
     await api
-      .post('/account', {
-        email,
-        name,
-        password,
-      })
-      .then(() => navigate('/signin'))
+      .post(
+        '/account',
+        {
+          email,
+          name,
+          password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .then(() => navigate('/signin', { replace: true }))
       .catch((err) => {
         if (err.response.data.message === 'Email already registered.') {
           setError(

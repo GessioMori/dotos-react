@@ -1,10 +1,15 @@
-import { HeaderContainer } from './Header.styles'
+import { HeaderContainer, LogoutButton } from './Header.styles'
 import { Logo } from './Logo'
 
-export function Header() {
+interface HeaderProps {
+  isLogged: boolean
+}
+
+export function Header({ isLogged }: HeaderProps) {
   return (
     <HeaderContainer>
       <Logo />
+      {isLogged && <LogoutButton>Sign out</LogoutButton>}
     </HeaderContainer>
   )
 }

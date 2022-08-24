@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Key, User } from 'phosphor-react'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import * as zod from 'zod'
 import { ButtonContainer } from '../../components/Button.styles'
 import { BaseContainer } from '../../components/Container.styles'
@@ -28,7 +27,7 @@ type SignInInputs = zod.infer<typeof validationSchema>
 
 export function SignIn() {
   const [isVisible, setIsVisible] = useState(false)
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const {
     register,
@@ -45,7 +44,7 @@ export function SignIn() {
         email,
         password,
       })
-      .then(() => navigate('/'))
+      .then((data) => console.log(data))
       .catch((err) => {
         if (err.response.data.message === 'Invalid email or password.') {
           setError(

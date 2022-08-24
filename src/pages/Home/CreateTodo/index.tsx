@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import * as zod from 'zod'
 import { ButtonContainer } from '../../../components/Button.styles'
 import { InputContainer } from '../../../components/Input.styles'
+import { api } from '../../../libs/axios'
 import {
   CreateTodoForm,
   DueToButtonContainer,
@@ -27,6 +28,11 @@ const validationSchema = zod
 
 type createTodoInput = zod.infer<typeof validationSchema>
 
+interface CreateTodoDTO {
+  content: string
+  due_to?: string
+}
+
 export function CreateTodo() {
   const {
     register,
@@ -36,22 +42,24 @@ export function CreateTodo() {
     resolver: zodResolver(validationSchema),
   })
 
+  async function handleRequest(data: CreateTodoDTO) {
+    api.post('/todos', data)
+  }
+
   const onSubmit: SubmitHandler<createTodoInput> = ({
     content,
     dueToDate,
     dueToHour,
   }) => {
     if (!dueToDate && !dueToHour) {
-      console.log({
-        content,
-      })
+      handleRequest({ content })
     } else if (dueToDate && !dueToHour) {
-      console.log({
+      handleRequest({
         content,
         due_to: dayjs(dueToDate + '23:59:59').toISOString(),
       })
     } else {
-      console.log({
+      handleRequest({
         content,
         due_to: dayjs(dueToDate + dueToHour).toISOString(),
       })

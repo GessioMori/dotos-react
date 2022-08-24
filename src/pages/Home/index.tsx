@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import { todoMock } from '../../assets/todoMock'
 import { MainContainer } from '../../components/MainContainer.styles'
+import { api } from '../../libs/axios'
 import { CreateTodo } from './CreateTodo'
 import { FilterTodos } from './FilterTodos'
 import { PaginatedItems } from './PaginatedItems'
@@ -43,6 +43,15 @@ export function Home() {
   }
 
   useEffect(() => {
+    async function fetchTodos(startDate: string, endDate: string) {
+      await api
+        .post('/todos/interval', {
+          begin: startDate,
+          end: endDate,
+        })
+        .then((response) => sortTodos(filterTodosByDate(response.data)))
+    }
+
     function filterTodosByDate(todosList: ITodo[]) {
       return todosList.filter(
         (todo) =>
@@ -72,7 +81,7 @@ export function Home() {
       )
       setTodos(() => [...delayedTodos, ...incompleteTodos, ...completedTodos])
     }
-    sortTodos(filterTodosByDate(todoMock))
+    fetchTodos(startDate, endDate)
   }, [startDate, endDate])
 
   return (
