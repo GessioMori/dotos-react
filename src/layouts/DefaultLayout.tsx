@@ -28,13 +28,17 @@ export function DefaultLayout() {
         navigate('/dashboard')
         setIsLogged(true)
       } catch {
-        if (pathname === '/signin' || pathname === '/dashboard') {
+        if (
+          pathname === '/signin' ||
+          pathname === '/dashboard' ||
+          pathname === '/'
+        ) {
           navigate('/signin')
         }
       }
     }
-    setAuth()
-  }, [navigate, pathname])
+    !isLogged && setAuth()
+  }, [navigate, pathname, isLogged])
 
   return (
     <>

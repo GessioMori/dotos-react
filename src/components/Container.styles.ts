@@ -13,6 +13,10 @@ export const BaseContainer = styled.div`
 
   background-color: ${(props) => props.theme.dark800};
 
+  & > p {
+    text-align: center;
+  }
+
   form {
     display: flex;
     flex-direction: column;
