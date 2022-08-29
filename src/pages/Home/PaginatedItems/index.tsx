@@ -1,33 +1,36 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate'
-import { ITodo } from '../Home'
+import { useContextSelector } from 'use-context-selector'
+import { ITodo, TodosContext } from '../../../contexts/TodoContext'
 import { Items } from '../Items'
 
-export function PaginatedItems({
-  itemsPerPage,
-  todosList,
-}: {
+interface PaginatedItemsProps {
   itemsPerPage: number
-  todosList: ITodo[]
-}) {
+}
+
+export function PaginatedItems({ itemsPerPage }: PaginatedItemsProps) {
+  const todosList = useContextSelector(TodosContext, (context) => context.todos)
   const [currentItems, setCurrentItems] = useState<ITodo[] | null>(null)
   const [pageCount, setPageCount] = useState(0)
   const [itemOffset, setItemOffset] = useState(0)
 
   useEffect(() => {
     setItemOffset(0)
-  }, [todosList])
+  }, [])
+
+  const handlePageClick = useCallback(
+    (event: { selected: number }) => {
+      const newOffset = (event.selected * itemsPerPage) % todosList.length
+      setItemOffset(newOffset)
+    },
+    [itemsPerPage, todosList],
+  )
 
   useEffect(() => {
     const endOffset = itemOffset + itemsPerPage
     setCurrentItems(todosList.slice(itemOffset, endOffset))
     setPageCount(Math.ceil(todosList.length / itemsPerPage))
   }, [itemOffset, itemsPerPage, todosList])
-
-  const handlePageClick = (event: { selected: number }) => {
-    const newOffset = (event.selected * itemsPerPage) % todosList.length
-    setItemOffset(newOffset)
-  }
 
   return (
     <>

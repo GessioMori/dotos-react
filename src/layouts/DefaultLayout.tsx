@@ -9,8 +9,6 @@ export function DefaultLayout() {
   const navigate = useNav()
   const { pathname } = useLocation()
 
-  console.log(pathname)
-
   const handleLog = (state: boolean) => {
     if (state) {
       navigate('/dashboard')

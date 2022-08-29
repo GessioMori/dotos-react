@@ -1,4 +1,4 @@
-import { ITodo } from '../Home'
+import { ITodo } from '../../../contexts/TodoContext'
 import { Todo } from '../Todo'
 
 export function Items({ currentItems }: { currentItems: ITodo[] | null }) {

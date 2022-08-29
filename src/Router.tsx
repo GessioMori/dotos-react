@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+import { TodosContextProvider } from './contexts/TodoContext'
 import { DefaultLayout } from './layouts/DefaultLayout'
 import { ChangePassword } from './pages/ChangePassword'
 import { Home } from './pages/Home'
@@ -14,7 +15,14 @@ export function Router() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/recover" element={<RecoverPassword />} />
         <Route path="/changepassword/:token" element={<ChangePassword />} />
-        <Route path="/dashboard" element={<Home />} />
+        <Route
+          path="/dashboard"
+          element={
+            <TodosContextProvider>
+              <Home />
+            </TodosContextProvider>
+          }
+        />
       </Route>
     </Routes>
   )

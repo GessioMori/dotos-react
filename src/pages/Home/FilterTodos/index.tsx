@@ -1,18 +1,20 @@
 import dayjs from 'dayjs'
+import { useContextSelector } from 'use-context-selector'
 import { InputContainer } from '../../../components/Input.styles'
+import { TodosContext } from '../../../contexts/TodoContext'
 import { FilterContainer, FilterDateContainer } from './styles'
 
-interface FilterTodosProps {
-  handleDateChange: (value: string, type: 'newStartDate' | 'newEndDate') => void
-  endDate: string
-  startDate: string
-}
-
-export function FilterTodos({
-  handleDateChange,
-  endDate,
-  startDate,
-}: FilterTodosProps) {
+export function FilterTodos() {
+  const { startDate, endDate, handleDateChange } = useContextSelector(
+    TodosContext,
+    (context) => {
+      return {
+        handleDateChange: context.handleDateChange,
+        startDate: context.startDate,
+        endDate: context.endDate,
+      }
+    },
+  )
   return (
     <FilterContainer>
       <FilterDateContainer>

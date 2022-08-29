@@ -1,6 +1,8 @@
 import dayjs from 'dayjs'
 import { CheckCircle, TrashSimple, XCircle } from 'phosphor-react'
 import { useState } from 'react'
+import { useContextSelector } from 'use-context-selector'
+import { TodosContext } from '../../../contexts/TodoContext'
 import {
   TodoActionButton,
   TodoButtonsContainer,
@@ -9,14 +11,29 @@ import {
 } from './styles'
 
 interface TodoProps {
+  id: string
   is_completed: boolean
   content: string
   due_to: string | null
   created_at: string
 }
 
-export function Todo({ content, created_at, due_to, is_completed }: TodoProps) {
+export function Todo({
+  id,
+  content,
+  created_at,
+  due_to,
+  is_completed,
+}: TodoProps) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const handleTodoDelete = useContextSelector(
+    TodosContext,
+    (context) => context.handleTodoDelete,
+  )
+  const handleTodoStatusChange = useContextSelector(
+    TodosContext,
+    (context) => context.handleTodoStatusChange,
+  )
 
   function toggleExpanded() {
     setIsExpanded((current) => !current)
@@ -53,6 +70,7 @@ export function Todo({ content, created_at, due_to, is_completed }: TodoProps) {
           <TodoButtonsContainer>
             <TodoActionButton
               variant={defineStatusColor() === 'green' ? 'yellow' : 'green'}
+              onClick={() => handleTodoStatusChange(id, !is_completed)}
             >
               {defineStatusColor() === 'green' ? (
                 <XCircle weight="bold" />
@@ -60,7 +78,10 @@ export function Todo({ content, created_at, due_to, is_completed }: TodoProps) {
                 <CheckCircle weight="bold" />
               )}
             </TodoActionButton>
-            <TodoActionButton variant="red">
+            <TodoActionButton
+              variant="red"
+              onClick={() => handleTodoDelete(id)}
+            >
               <TrashSimple weight="bold" />
             </TodoActionButton>
           </TodoButtonsContainer>

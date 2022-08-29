@@ -2,9 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import { Calendar, Clock, NotePencil } from 'phosphor-react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useContextSelector } from 'use-context-selector'
 import * as zod from 'zod'
 import { ButtonContainer } from '../../../components/Button.styles'
 import { InputContainer } from '../../../components/Input.styles'
+import { TodosContext } from '../../../contexts/TodoContext'
 import { api } from '../../../libs/axios'
 import {
   CreateTodoForm,
@@ -34,16 +36,22 @@ interface CreateTodoDTO {
 }
 
 export function CreateTodo() {
+  const handleTodoCreation = useContextSelector(
+    TodosContext,
+    (context) => context.handleTodoCreation,
+  )
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<createTodoInput>({
     resolver: zodResolver(validationSchema),
   })
 
   async function handleRequest(data: CreateTodoDTO) {
-    api.post('/todos', data)
+    api.post('/todos', data).then((data) => handleTodoCreation(data.data))
+    reset()
   }
 
   const onSubmit: SubmitHandler<createTodoInput> = ({
