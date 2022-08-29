@@ -7,6 +7,7 @@ export const TodosContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 8px;
+  overflow: hidden;
 
   ${(props) => css`
     background-color: ${props.theme.dark800};

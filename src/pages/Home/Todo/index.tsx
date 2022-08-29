@@ -70,7 +70,10 @@ export function Todo({
           <TodoButtonsContainer>
             <TodoActionButton
               variant={defineStatusColor() === 'green' ? 'yellow' : 'green'}
-              onClick={() => handleTodoStatusChange(id, !is_completed)}
+              onClick={(e) => {
+                handleTodoStatusChange(id, !is_completed)
+                e.currentTarget.blur()
+              }}
             >
               {defineStatusColor() === 'green' ? (
                 <XCircle weight="bold" />
