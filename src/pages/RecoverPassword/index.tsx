@@ -37,7 +37,7 @@ export function RecoverPassword() {
           <InputContainer
             type="email"
             id="email"
-            placeholder="Enter your email."
+            placeholder="Enter your email"
             marginTop={true}
             {...register('email')}
           />

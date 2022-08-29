@@ -12,6 +12,7 @@ import { MainContainer } from '../../components/MainContainer.styles'
 import { PasswordButton } from '../../components/PasswordButton'
 import { PasswordContainer } from '../../components/PasswordContainer.styles'
 import { TitleContainer } from '../../components/Title.styles'
+import { useLogUser } from '../../layouts/DefaultLayout'
 import { api } from '../../libs/axios'
 
 const validationSchema = zod
@@ -27,7 +28,7 @@ type SignInInputs = zod.infer<typeof validationSchema>
 
 export function SignIn() {
   const [isVisible, setIsVisible] = useState(false)
-  // const navigate = useNavigate()
+  const { handleLog } = useLogUser()
 
   const {
     register,
@@ -44,14 +45,14 @@ export function SignIn() {
         email,
         password,
       })
-      .then((data) => console.log(data))
+      .then(() => {
+        handleLog(true)
+      })
       .catch((err) => {
-        if (err.response.data.message === 'Invalid email or password.') {
-          setError(
-            'email',
-            { message: 'Invalid email or password' },
-            { shouldFocus: false },
-          )
+        if (
+          err.response &&
+          err.response.data.message === 'Invalid email or password.'
+        ) {
           setError(
             'password',
             { message: 'Invalid email or password' },
