@@ -1,7 +1,10 @@
 import axios from 'axios'
 
 export const api = axios.create({
-  baseURL: 'http://172.18.0.1:3333',
+  baseURL:
+    import.meta.env.VITE_ENV === 'prod'
+      ? import.meta.env.VITE_API_URL_PROD
+      : import.meta.env.VITE_API_URL_DEV,
 })
 
 api.interceptors.request.use(
