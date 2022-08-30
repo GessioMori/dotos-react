@@ -14,10 +14,6 @@ export function PaginatedItems({ itemsPerPage }: PaginatedItemsProps) {
   const [pageCount, setPageCount] = useState(0)
   const [itemOffset, setItemOffset] = useState(0)
 
-  useEffect(() => {
-    setItemOffset(0)
-  }, [])
-
   const handlePageClick = useCallback(
     (event: { selected: number }) => {
       const newOffset = (event.selected * itemsPerPage) % todosList.length
@@ -25,6 +21,16 @@ export function PaginatedItems({ itemsPerPage }: PaginatedItemsProps) {
     },
     [itemsPerPage, todosList],
   )
+
+  useEffect(() => {
+    setItemOffset(0)
+  }, [])
+
+  useEffect(() => {
+    if (todosList.length <= itemsPerPage) {
+      setItemOffset(0)
+    }
+  }, [todosList, itemsPerPage])
 
   useEffect(() => {
     const endOffset = itemOffset + itemsPerPage
